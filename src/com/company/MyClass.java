@@ -3,153 +3,121 @@ package com.company;
 import javax.swing.*;
 import java.util.Arrays;
 
+
 public class MyClass{
+
+    public void polyvalue(boolean[] pol){
+        polyL = pol.length;
+        poly = pol;
+        rash = pol.length - 1;
+    }
+
+
+    public boolean[] shifting(int k, boolean[] arrey){
+        boolean[] arrz = new boolean[arrey.length + k];
+        for(int i = arrey.length + k - 1; i > k - 1; i--){
+            arrz[i] = arrey[i-k];
+        }
+        for(int i = k - 1; i > -1; i--){
+            arrz[i] = false;
+        }
+        return arrz;
+    }
+
+    public boolean[] mod(boolean[] as){
+        as = remove0(as);
+        while(as.length - polyL >=0 ){
+            boolean[] temp;
+            temp = shifting(as.length - polyL,poly);
+            as = add(as,temp);
+            as = remove0(as);
+        }
+        return as;
+    }
+
+    public boolean[] add0( int k, boolean[] ar){
+        int length = ar.length + k;
+        boolean[] arrees = new boolean[ar.length + k];
+        int i = 0;
+        for( i = i; i < ar.length; i++){
+            arrees[i] = ar[i];
+        }
+        int lim = i;
+        for(i = lim; i < ar.length + k; i++){
+            arrees[i] = false;
+        }
+        return arrees;
+    }
 
     public boolean[] add(boolean[] a, boolean[] b){
         if(a.length != b.length){
-            if(b.length > a.length){
-                a = aidzero(a,b.length - a.length);
+            if(a.length > b.length ){
+                b = add0(a.length - b.length,b);
             }
-            else {
-                b = aidzero(b,a.length - b.length);
+            else{
+                a = add0(b.length - a.length, a);
             }
         }
-        boolean[] arres = new boolean[a.length];
-        for(int i = 0; i < a.length; i ++){
-            arres[i] = (a[i])^(b[i]);
+        boolean[] rez_add = new boolean[b.length];
+        for(int i = 0; i < b.length; i ++){
+            rez_add[i] = (a[i])^(b[i]);
         }
-        arres = mod(arres);
-        return arres;
+        return rez_add;
     }
 
-    private boolean[] shifting(boolean[] a, int l){
-        boolean[] ar = new boolean[a.length + l];
-        for(int i = a.length + l - 1; i > l - 1; i--){
-            ar[i] = a[i-l];
+    public boolean[] remove0(boolean[] ar){
+        int i = ar.length - 1;
+        while(!ar[i] && i > 0){
+            i--;
         }
-        for(int i = l - 1; i > -1; i--){
-            ar[i] = false;
+        boolean[] rez_arr = new boolean[i+1];
+        for(int j = 0; j < i + 1; j++){
+            rez_arr[j] = ar[j];
         }
-        return ar;
+        return rez_arr;
     }
 
-
-    public boolean[] aidzero(boolean[] a, int k){
-        boolean[] arres = new boolean[a.length+k];
-        int i = 0;
-        for( i = i; i < a.length; i++){
-            arres[i] = a[i];
-        }
-        for(i = i; i < a.length + k; i++){
-            arres[i] = false;
-        }
-        return arres;
-    }
-
-    private boolean[] mod(boolean[] a){
-        boolean[] rga = new boolean[1];
-        rga = remove0(a);
-        if(rga.length < this.polyL){
-            return rga;
-        }
-        int lendiff = rga.length - this.polyL;
-        while(lendiff>=0 ){
-            boolean[] temp;
-            temp = shifting(poly,lendiff);
-            rga = add(rga,temp);
-            lendiff = rga.length - this.polyL;
-            rga = remove0(rga);
-        }
-        return rga;
+    public boolean[] themainadd(boolean[] a, boolean[] b){
+        b = mod(b);
+        a = mod(a);
+        boolean[] arrres = add(a,b);
+        return arrres;
     }
 
     public boolean[] mul(boolean[] a,boolean[] b){
         if(a.length != b.length){
-            if(b.length > a.length){
-                a = aidzero(a,b.length - a.length);
-            }
-            else {
-                b = aidzero(b,a.length - b.length);
-            }
-        }
-        boolean[] arres = new boolean[rash];
-        for (int i = 0; i < a.length; i++){
-            if(b[i]){
-                boolean[] temp;
-                temp = shifting(a,i);
-                arres = add(arres,temp);
-            }
-        }
-        arres = mod(arres);
-        return arres;
-    }
-
-    public boolean[] remove0(boolean[] bl){
-        int i = bl.length - 1;
-        while(bl[i] == false){
-            if( i == 0 ){
-                break;
-            }
-            i--;
-        }
-        boolean[] arres = new boolean[i+1];
-        for(int j = 0; j < i + 1; j++){
-            arres[j] = bl[j];
-        }
-        return arres;
-    }
-
-
-    public boolean[] arrofboolean(String str){
-        char symb;
-        boolean[] arres = new boolean[str.length()];
-        for(int i = str.length() - 1; i > -1; i--){
-            symb = str.charAt(i);
-            if(symb == '0'){
-                arres[i] = false;
+            if(a.length > b.length ){
+                b = add0(a.length - b.length,b);
             }
             else{
-                arres[i] = true;
+                a = add0(b.length - a.length, a);
             }
         }
-        return arres;
-    }
-
-    public boolean[] power(boolean[] arrp,boolean[] argumentum){
-        boolean[] arres = new boolean[1];
-        boolean bool;
-        arres[0] =true;
-        for(int i = arrp.length - 1; i > -1 ; i--){
-            bool = arrp[i];
-            if(bool){
-                arres = mul(arres,argumentum);
-            }
-            if(i!=0) {
-                argumentum = quadrat(argumentum);
+        boolean[] rez_arr = new boolean[1];
+        rez_arr[0] = false;
+        for (int i = 0; i < a.length; i++){
+            if(b[i] == true){
+                boolean[] temp;
+                temp = shifting(i,a);
+                rez_arr = themainadd(rez_arr,temp);
             }
         }
-        return arres;
+        return rez_arr;
     }
 
-    public boolean[] obratka(boolean[] argumentum_ad_baculum){
-        boolean[] arres = new boolean[1];
-        arres[0] = true;
-        for(int i = 1; i < rash; i++){
-            argumentum_ad_baculum = quadrat(argumentum_ad_baculum);
-            arres = mul(arres,argumentum_ad_baculum);
-        }
-        return arres;
+    public boolean[] themainmul(boolean[] a,boolean[] b){
+        boolean[] prod = mul(a,b);
+        prod = mod(prod);
+        return prod;
     }
 
-
-    public long[] from_hex_to_string(String srt){
-        // взяла у Санька
+    public long[] hexToDecimal(String basic_str){
         int k = 4;
-        int str_len = srt.length();
+        int str_len = basic_str.length();
         int arr_len = str_len/k + ( str_len%k>0 ? 1:0 ) ;
-        StringBuffer str_buf = new StringBuffer(srt);
+        StringBuffer str_buf = new StringBuffer(basic_str);
         long[] arr = new long [arr_len];
-        for(int i = k, j = 0; i<= str_len && j <arr_len; i+=k, j++){
+        for(int i = k, j = 0; i<=str_len && j <arr_len; i+=k, j++){
             arr[j] = Long.parseLong(str_buf.substring(str_len-i,str_len-i+k),16);
         }
         if (str_len%k!=0) {
@@ -158,11 +126,8 @@ public class MyClass{
         return arr;
     }
 
-
-
     public String getBinString(String arg){
-        // і це трохи
-        long[] arr = from_hex_to_string(arg);
+        long[] arr = hexToDecimal(arg);
         int len = arr.length; StringBuffer str = new StringBuffer("");
         for(int i = len - 1; i > -1; i--){
             str.append(Long.toBinaryString(arr[i]));
@@ -172,7 +137,6 @@ public class MyClass{
     }
 
     public boolean[] getBooleanArray(String basic){
-        // і це трохи
         int string_len = basic.length();
         boolean[] arr = new boolean[string_len]; char chr;
         for(int i = string_len - 1; i > -1; i--){
@@ -186,33 +150,56 @@ public class MyClass{
         return arr;
     }
 
-    // конец
 
-    public boolean[] quadrat(boolean[] p){
-        boolean[] arres = new boolean[2* p.length];
-        for(int i = 0; i < p.length; i++){
-            if(p[i]){
-                arres[2*i] = p[i];
+    public boolean[] quadrat(boolean[] a){
+        boolean[] prod = new boolean[2*a.length];
+        for(int i = 0; i < a.length; i++){
+            if(a[i]){
+                prod[2*i] = a[i];
             }
         }
-        arres = mod(arres);
+        prod = mod(prod);
+        return prod;
+    }
+
+    public boolean[] obratka(boolean[] perpetuum_mobile){
+        boolean[] arres = new boolean[rash];
+        arres[0] = true;
+        for(int i = 1; i < rash; i++){
+            perpetuum_mobile = quadrat(perpetuum_mobile);
+            arres = themainmul(arres,perpetuum_mobile);
+        }
         return arres;
     }
 
-    public boolean[] itsatrap(boolean[] p){
-        boolean[] temp = new boolean[1];
+    public boolean[] gopwr(boolean[] pw,boolean[] perpetuum_modile){
         boolean[] arres = new boolean[rash];
-        arres = remove0(arres);
-        for(int i = 0; i < rash; i++){
-            temp = add(arres,temp);
-            arres = quadrat(arres);
+        arres[0] = true;
+        boolean bool;
+        for(int i = pw.length - 1; i > -1 ; i--){
+            bool = pw[i];
+            if(bool){
+                arres = themainmul(arres,perpetuum_modile);
+            }
+            if(i!=0) {
+                perpetuum_modile = quadrat(perpetuum_modile);
+            }
         }
-        return temp;
+        return arres;
     }
 
+    public boolean[] itsatrap(boolean[] v){
+        boolean[] arres = new boolean[rash];
+        v = remove0(v);
+        for(int i = 0; i < rash; i++){
+            arres = add(v,arres);
+            v = quadrat(v);
+        }
+        return arres;
+    }
 
-    public int polyL;
-    public boolean[] poly;
     public int rash;
+    public boolean[] poly;
+    public int polyL;
 
 }

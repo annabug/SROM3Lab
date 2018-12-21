@@ -1,5 +1,4 @@
 package com.company;
-
 import com.company.MyClass;
 import com.sun.jdi.Value;
 import org.junit.After;
@@ -52,13 +51,9 @@ public class MyClassTest2 {
         String gen = "100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000001";
         String power_str = "11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111";
         boolean[] power = obj.getBooleanArray(power_str);
-        obj.rash = 191;
-        boolean[] poly = obj.getBooleanArray(gen);
-        obj.poly = poly;
-        poly = obj.remove0(poly);
-        obj.polyL = poly.length;
+        obj.polyvalue(obj.getBooleanArray(gen));
         boolean[] a = obj.getBooleanArray(this.valueA);
-        boolean[] res = obj.power(a,power);
+        boolean[] res = obj.gopwr(power,a);
         assertEquals(Correctness(res),true);
     }
 }
